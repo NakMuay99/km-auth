@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-uv2w4gqDEIKx2AqFlf5lnFNOowit7TezFWzZIM1F7vM='; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<title>KASAYSAYAN MEDIA sign-in relay</title>
+<style>body{background:#0a0909;color:#f4ecde;font:16px/1.5 Georgia,serif;margin:0;padding:48px 16px;text-align:center}</style>
+</head>
+<body>
+<!-- One-time sign-in relay for the owner's local publishing tool. Stores nothing, loads nothing,
+     forwards only the one-time authorisation code and state to the owner's own computer. -->
+<p id="msg">Forwarding the sign-in to your computer&hellip;</p>
+<script>
+(function () {
+  var allowed = ["code", "state", "error", "error_reason", "error_description"];
+  var q = new URLSearchParams(window.location.search);
+  window.history.replaceState(null, "", window.location.pathname);
+  var out = new URLSearchParams();
+  allowed.forEach(function (k) { if (q.has(k)) { out.set(k, q.get(k)); } });
+  var msg = document.getElementById("msg");
+  if (!out.has("state")) { msg.textContent = "Nothing to forward. You can close this tab."; return; }
+  window.location.replace("http://127.0.0.1:8766/?" + out.toString());
+})();
+</script>
+</body>
+</html>
